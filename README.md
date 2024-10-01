@@ -467,16 +467,16 @@ Font  Font Name     Characters                           Size
  7 = big7font       ABCD                                   4 
  8 = big8font       ABCD                                   4 
  9 = big9font       ABCD                                   4 
- X = symbolfont     DSTMH><^vuds_1234KkLQnNbCF            26      
- b = Boldfont       ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789  36  
- B = boldlcfont     abcdefghijklmnopqrstuvwxyz            26  
- L = lowercasefont  gjpqym                                 6  
+ S = symbolfont     DSTMH><^vuds_1234KkLQnNbCF            26      
+ B = Boldfont       ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789  36  
+ b = boldlcfont     abcdefghijklmnopqrstuvwxyz            26  
+ l = lowercasefont  gjpqym                                 6  
  c = smallcapsfont  ABDEFGHIJKLMNPQRTUY                   19  Use lcase cosvwxz for smallcaps COSVWXZ   
- F = smlfrequfont   kHz                                    3  
- V = smlrevcapsfont BCFLSTR                                7  
- v = revcapsfont    ABCDEFGHIKLOPRSTUVXYZ0123456789=:     33  No JMNQW.  '=' is 5x8 pixel block.
+ f = smlfrequfont   kHz                                    3  
+ v = smlrevcapsfont BCFLSTR                                7  
+ V = revcapsfont    ABCDEFGHIKLOPRSTUVXYZ0123456789=:     33  No JMNQW.  '=' is 5x8 pixel block.
  C = channelfont    241dca5b3ef6xyzuvwjkl                 21  2...6 are channel daises, xyz, ...jkl are 3-char triangular shapes.
- l = logofont       LRdtsHDC0123456                       15  
+ L = logofont       LRdtsHDC0123456                       15  
  O = outvaderfont   abcd                                   4 
  I = invaderfont    abcd                                   4 
  P = laserfont      12345_                                 6 
