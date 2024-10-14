@@ -471,11 +471,11 @@ Font  Font Name     Characters                           Size
  B = Boldfont       ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789  36  
  b = boldlcfont     abcdefghijklmnopqrstuvwxyz            26  
  l = lowercasefont  gjpqym                                 6  
- c = smallcapsfont  ABDEFGHIJKLMNPQRTUY                   19  Use lcase cosvwxz for smallcaps COSVWXZ   
+ c = smallcapsfont  ABDEFGHIJKLMNPQRTUY                   19  Use built-in ROM cosvwxz for smallcaps COSVWXZ   
  f = smlfrequfont   kHz                                    3  
  v = smlrevcapsfont BCFLSTR                                7  
  V = revcapsfont    ABCDEFGHIKLOPRSTUVXYZ0123456789=:     33  No JMNQW.  '=' is 5x8 pixel block.
- C = channelfont    241dca5b3ef6xyzuvwjkl                 21  2...6 are channel daises, xyz, ...jkl are 3-char triangular shapes.
+ C = channelfont    241dca5b3ef6xyzuvwjkl                 21  2...6 are channel daisies, xyz, ...jkl are 3-char triangular shapes.
  L = logofont       LRdtsHDC0123456                       15  
  O = outvaderfont   abcd                                   4 
  I = invaderfont    abcd                                   4 
