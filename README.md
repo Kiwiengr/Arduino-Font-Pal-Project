@@ -117,11 +117,12 @@ where the eight unique CCs are marked as vO^QLRXg, for a total of ten CCs on scr
 
 The Channel ("C") font produces 6.1 channel layouts similar to the following:
 ```
-      *                                  C            C   =  Center front
-  *       *                         LF       RF       LF  =  Left Front 
+      *                                  C            LF  =  Left front
+  *       *                         LF       RF       C   =  Center front 
       *       correspond channels:      SUB           RF  =  Right Front
   *       *                         LS       RS       LS  =  Left Surround
-      *                                  ES           RS  =  Right Surround
+      *                                  ES           ES  =  Extended Surround
+                                                      RS  =  Right Surround
                                                       SUB =  Subwoofer
 ```
 
