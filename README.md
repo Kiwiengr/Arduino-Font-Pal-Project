@@ -3,7 +3,7 @@ and ultimately plans to transform the font manager into an Arduino library funct
 # Arduino Font-Pal README file
 Copyright (c) 2024 Alastair Roxburgh
 
-(Abstract: Font-Pal recreates the functionality of an original 68HC11 stack-frame assembly language program named SCREENS, devised in 1997 by Alastair Roxburgh & Sunil Rawal for the EOS series of TheaterMaster digital home theater audio processors. Written in Arduino C++, Font-Pal uses Strings, chars and arrays of struct to create a custom font manager for 2x20 LCDs
+(Abstract: Font-Pal recreates the functionality of an original 68HC11 stack-frame assembly language program named SCREENS, devised in 1997 by Alastair Roxburgh & Sunil Rawal for the EOS series of TheaterMaster digital home theater audio processors. Written in Arduino C++, Font-Pal uses Strings, chars and arrays of struct to create a custom font manager for 16x2, 20x2, and 20x4 LCDs
 based on the Hitachi HD44780 chip.)
 
 Note:
@@ -71,7 +71,7 @@ microprocessor.
 Several examples of Font-Pal use follow:
 
 ### EXAMPLE (1):
-Font-Pal can quickly turn a 2x20 LCD into a 2- to 10-channel VU meter, simultaneously displaying up to 16 levels per channel at 6 dB per step. If we reserve the bottom bar for zero signal and ignore the 6 dB gap between the two LCD rows, we obtain a total range on each channel of 15*6 dB = 90 dB, which can be updated twice a second. Indeed, by using the two LCD rows separately, we can display up to 20 channels with half of the vertical resolution. In such extreme cases of power through the repetition of bitmaps, eight static bitmaps stored in the CGRAM are stretched to as many as twenty simultaneously displayed locations on the LCD, as in the following examples of symmetrical VU mater layouts:
+Font-Pal can quickly turn a 20x2 LCD into a 2- to 10-channel VU meter, simultaneously displaying up to 16 levels per channel at 6 dB per step. If we reserve the bottom bar for zero signal and ignore the 6 dB gap between the two LCD rows, we obtain a total range on each channel of 15*6 dB = 90 dB, which can be updated twice a second. Indeed, by using the two LCD rows separately, we can display up to 20 channels with half of the vertical resolution. In such extreme cases of power through the repetition of bitmaps, eight static bitmaps stored in the CGRAM are stretched to as many as twenty simultaneously displayed locations on the LCD, as in the following examples of symmetrical VU mater layouts:
 ```
                      xxxxxxx  xxxxxxx     2 channels
                    xxxxxx xxxxxx xxxxxx   3 channels      
@@ -82,7 +82,7 @@ Font-Pal can quickly turn a 2x20 LCD into a 2- to 10-channel VU meter, simultane
                     x x x x xx x x x x    9 channels
                    x x x x x  x x x x x   10 channels
 ```
-where 'x' represents a single bar-font character. The following diagram shows a VU meter for ten audio channels constructed using a 2x20 char LCD. For 6 dB steps, converting from linear amplitude to logarithmic (dB) amplitude is straightforward: the audio DSP averages the observed position of the highest 1-bit in arithmetically positive audio samples (typically 16- to 24-bit words). It does not matter if the number representation is integer or fractional. If the VU meter processes five values per second, an appropriate averaging period is about 200 ms or 10,000 audio samples. If you require a peak-reading VU meter, display the position of the highest bit observed during the same period rather than the average. You can also slide the dB scale up or down in 6 dB steps to set the 0 dB wherever you want. The diagram (below) shows amplitudes of 0, 0, 60 dB, 66 dB, 18 dB, 78 dB, 30 dB, 36 dB, 96 dB, and 0, where '0' (not defined on a logarithmic scale) represents zero signal. This example illustrates how you can stretch the eight CGRAM locations to create a VU meter for up to 10 channels on a 2x20 LCD:
+where 'x' represents a single bar-font character. The following diagram shows a VU meter for ten audio channels constructed using a 20x2 char LCD. For 6 dB steps, converting from linear amplitude to logarithmic (dB) amplitude is straightforward: the audio DSP averages the observed position of the highest 1-bit in arithmetically positive audio samples (typically 16- to 24-bit words). It does not matter if the number representation is integer or fractional. If the VU meter processes five values per second, an appropriate averaging period is about 200 ms or 10,000 audio samples. If you require a peak-reading VU meter, display the position of the highest bit observed during the same period rather than the average. You can also slide the dB scale up or down in 6 dB steps to set the 0 dB wherever you want. The diagram (below) shows amplitudes of 0, 0, 60 dB, 66 dB, 18 dB, 78 dB, 30 dB, 36 dB, 96 dB, and 0, where '0' (not defined on a logarithmic scale) represents zero signal. This example illustrates how you can stretch the eight CGRAM locations to create a VU meter for up to 10 channels on a 20x2 LCD:
 ```
                    +--------------------+
                    |     2 3   5     8  |
@@ -168,7 +168,7 @@ Example String (where "_" represents an ASCII space 0x20, but you would type an 
                            "   l  BBB    l  l";
                LCDfontManager(); 
 ```
-There can be up to 40 display characters before the '|' marker character, with the corresponding font flags in the following row, which is convenient when constructing a display String on the fly. The VU meter capability is discussed later. In the meantime, here is a more normal string that fills all 40 locations on a 2x20 LCD:
+There can be up to 40 display characters before the '|' marker character, with the corresponding font flags in the following row, which is convenient when constructing a display String on the fly. The VU meter capability is discussed later. In the meantime, here is a more normal string that fills all 40 locations on a 20x2 LCD:
 ```
 clearTheStage();
 startPos = 0
@@ -176,12 +176,12 @@ lcdString = "This long String fills two lines exactly|"  // 2 CCs, 2 unique.
             "        l      l                       l";
 LCDfontManager(); 
 ```
-The number of characters after the "|" must equal the number before it. Counting is zero-relative, so the marker character is at position 40. Thus, the number of fontChars before the "|" is 40, and there are 40 fontFlags after the "|". A space in the second line indicates that the LCD's default ROM-based characters will be used. The total number of characters in this string is 81, of which only the first 40 get displayed (after CC substitutions).
+The number of characters after the "|" must equal the number before. Counting is zero-relative, so the marker character is at position 40. Thus, the number of fontChars before the "|" is 40, and there are 40 fontFlags after the "|". A space in the second line indicates that the LCD's default ROM-based characters will be used. The total number of characters in this string is 81, of which only the first 40 get displayed (after CC substitutions).
 
 Important Note: The Font-Pal LCD font manager expects ALL font-formatted Strings to have the second part marked by "|" and containing the fontFlags.
 
 ### DISPLAYING PLAIN TEXT:
-In addition to displaying font-formatted strings, Font-Pal also supports un-font-formatted Strings, a.k.a. plain text. It can display a mixture of the two. However, if plain text suffices for a particular LCD field and is 100% plain text (i.e., no font flags or "|" font marker character), the text is displayed more quickly. Please look at the examples below for more guidance on using this feature.
+In addition to displaying font-formatted strings, Font-Pal also supports un-font-formatted Strings, a.k.a. plain text. It can display a mixture of the two. However, if plain text suffices for a particular LCD field and is 100% plain (i.e., no font flags or "|" font marker character), the text is displayed more quickly. Please look at the examples below for more guidance on using this feature.
 
 ### MORE HINTS ON HOW TO USE FONT-PAL:
 You can copy and paste the following Font-Pal examples into your Arduino IDE or uncomment them in the void loop() section of the main .ino file:
@@ -293,7 +293,7 @@ Various error conditions are indicated by the appearance of the following specia
 ```
 
 ### GENERAL POINTS ABOUT HITACHI HD44780-BASED LCD DISPLAYS:
-The LCD is used write-only, with all screen editing in the screenImage RAM buffer that is then copied to the LCD by the LCDfontManager() function. A significant part of any digital controller design that uses a Hitachi HD44780-based LCD is consideration of the font-formatting design, juggling the timing of what is shown on the LCD and when, given the scarcity of CGRAM locations in the HD44780. This controller chip can display only eight unique custom characters (CCs), mitigated by the ease with which any CC can be repeated on-screen up to the limit of 40 characters in a 20x2 LCD.
+The LCD is used write-only, with all screen editing in the screenImage RAM buffer that is then copied to the LCD by the LCDfontManager() function. A significant part of any digital controller design that uses a Hitachi HD44780-based LCD is consideration of the font-formatting design, juggling the timing of what is shown on the LCD and when, given the scarcity of CGRAM locations in the HD44780. This controller chip can display only eight unique custom characters (CCs), mitigated by the ease with which any CC can be repeated on-screen up to the limit of the LCD (e.g., 40 characters in a 20x2 LCD).
 
 With due care during the design phase of a project (such as the EAD EOS TheaterMasters), the limitation on the number of unique CCs can be made to look like many more. Easy to overlook but helpful in this regard are the following points:
 
@@ -354,13 +354,15 @@ Splash/Feature screen example 5: (six unique CCs, nine unique ROM characters)
 
 (iii) Letters in common between font-enhanced words come at no additional CGRAM cost.
 
-(iv) Although CGRAM limits unique custom characters (CCs) to eight, they can be repeated up to the size of the display (a 2x20 LCD can display as many as 40 CCs).
+(iv) Although CGRAM limits unique custom characters (CCs) to eight, they can be repeated up to the size of the display (e.g., 32 CCs for a 16x2 LCD, 40 for a 20x2 LCD, or 80 for a 20x4 LCD).
 
 (v) Eight CCs are sufficient to code multi-channel vertical bar graphs with 16 steps and horizontal bar graphs with up to 100 steps.
 
-(vi) Sometimes, it's feasible to design multi-character CCs to hide the one-pixel gap between LCD characters and LCD rows (Okaya and many similar 2x16 or 2x20 LCDs have this feature). Examples of this are provided in the bargraph font.
+(vi) Sometimes, it's feasible to design multi-character CCs that hide the one-pixel gap between LCD characters and rows by including a mid-character gap in the CCs. Examples of this are provided in the bar-graph font. (Okaya and many similar 16x2 or 20x2 LCDs have a one-pixel gap between rows and columns).
 
-(vii) Use the "#" and "@" error flags to help you design screen layouts free from CGRAM overflow and font errors.
+(vii) Multi-character CCs will often look better if the one-pixel row/column gaps are added in the bitmap editor to preserve the geometry. This makes multi-character CCs look like they are being viewed through 1-pixel grid lines spaced five pixels horizontally and eight vertically. (Okaya and many similar 16x2 or 20x2 LCDs have a one-pixel gap between rows and columns). 
+
+(viii) Use the "#" and "@" error flags to help you design screen layouts free from CGRAM overflow and font errors.
 
 ## NOTES:
 During this development, I discovered that Arduino variables of type String and built-in functions that process them often have a problem with bytes or characters with the value 0x00, i.e., byte(0). This is a carry-over from the C (and C++) use of the \0 null character (0x00), the end-of-string marker in traditional C-strings, and even though the relatively new String type does not use such markers, my attempts to print Strings containing 0x00 sometimes had problems. Perhaps the Hitachi HD44780 designers already anticipated this problem because, to their credit, they arranged for a set of shadow addresses, allowing us to access those same eight CC bitmap locations in the chip's CGRAM at 0x00-0x07 or 0x08-0x0f (BTW, that OR is an inclusive-OR). Therefore, where it matters in this program, we number the HD44780 LCD controller's CGRAM locations from 0x08 to 0x0f (8 to 15). However, because no such duplicate addressing exists for the various arrays, all of which start at index 0, make sure to add 8 to all zero-relative custom character (CC) CGRAM pointer values when assembling a 'scene' (a name used here to describe an LCD that is made up of two or more small Strings that are assembled into the screenImage String being written to the LCD.
@@ -435,7 +437,7 @@ clearTheStage();
 
 (2a) Perform an interleave merge of fontChar & fontFlag sections of lcdString, excluding the '|' marker, e.g., "LR DoobyoD|ll BBB LBB" --> "LlRl DBoBoBb yLoBDB"), and also processes the top row of double-row symbols (e.g., "Test|B CASE|BBBB|" --> "TBe s t "):
 
-(3) We are nearly ready to copy the merged lcdString into screenImage starting at startPos. Still, first, we need to clean up the CC_id_table, removing any entries that will be overwritten by the current lcdString, which is necessary to maximize the tiny eight CC CGRAM resource. Here are the details of how that is done: Parse the even characters in merged_screenImage for CC codes that will be overwritten by a newly merged lcdString, beginning at startPos, and ending at startPos + lcdString.length() -1. As we discover these CCs in the relevant section of screenImage, we will delete them from the CC_id_table. And because CCs in screenImage are codes in the range 0x08-0x0f, that is the range we will look for. The tricky part of this parsing is to take into account that just like merged_lcsString, screenImage also uses the merged format of screenImage, wherein the relevant fontChars are at even locations, 0, 2, 4, 6, ... We can obtain even addresses by using a simple arithmetic left-shift (<< 1). However, we don't do this for CC_id_table (a table that contains a list of the CCs loaded into CGRAM of the LCD's controller chip). Given that C++ arrays are 0-relative, the CC_id_table addressing is 0x00 to 0x07, but because 0x00 (\nul) has special use in C and C++ for marking the end of c-char character strings, we cannot use 0x00 as a CC code value in String function and char processing. Luckily, the HD44780 LCD controller provides a set of shadow addresses for the CGRAM: 0x08-0x0f, obtained by adding 8 to the 0x00-0x07 addresses. This avoids treating the 0x00 CC code value as a special case. However, since, as mentioned above, C and C++ arrays start at 0 and proceed up from there, this program uses both ranges, 0x00-0x07 and 0x08-0x0f, as and when necessary. Typical contents of CC_id_table may look like this:
+(3) We are nearly ready to copy the merged lcdString into screenImage starting at startPos. Still, first, we need to clean up the CC_id_table, removing any entries that will be overwritten by the current lcdString, which is necessary to maximize the tiny eight CC CGRAM resource. Here are the details of how that is done: Parse the even characters in merged_screenImage for CC codes that will be overwritten by a newly merged lcdString, beginning at startPos, and ending at startPos + lcdString.length() -1. As we discover these CCs in the relevant section of screenImage, we will delete them from the CC_id_table. And because CCs in screenImage are codes in the range 0x08-0x0f, that is the range we will look for. The tricky part of this parsing is to take into account that just like merged_lcsString, screenImage also uses the merged format of screenImage, wherein the relevant fontChars are at even locations, 0, 2, 4, 6, ... We can obtain even addresses by using a simple arithmetic left-shift (<< 1). However, we don't do this for CC_id_table (a table that contains a list of the CCs loaded into CGRAM of the LCD's controller chip). Given that C++ arrays are 0-relative, the CC_id_table addressing is 0x00 to 0x07, but because 0x00 (\nul) has particular use in C and C++ for marking the end of c-char character strings, we cannot use 0x00 as a CC code value in String function and char processing. Luckily, the HD44780 LCD controller provides a set of shadow addresses for the CGRAM: 0x08-0x0f, obtained by adding 8 to the 0x00-0x07 addresses. This avoids treating the 0x00 CC code value as a special case. However, since, as mentioned above, C and C++ arrays start at 0 and proceed up from there, this program uses both ranges, 0x00-0x07 and 0x08-0x0f, as and when necessary. Typical contents of CC_id_table may look like this:
 ```
      CC_id_table[0] = "2C"; // ==> CC code = 0x08 = 0 + 8 = 8  ("2C" fonChar,fontFlag)
      CC_id_table[1] = "3C"; // ==> CC code = 0x09 = 1 + 8 = 9
@@ -446,9 +448,9 @@ clearTheStage();
      CC_id_table[6] = "gl"; // ==> CC code = 0x0e = 6 + 8 = 14  (g true descender)
      CC_id_table[7] = "sL"; // ==> CC code = 0x0f = 7 + 8 = 15
 ```
-If our parse finds, e.g., a CC code of 6 in the merged_screenImage overwrite section, this is a reference to the gl entry in the table, currently stored at CC_id_table[6]. We delete it from the table with
+If our parse finds, e.g., a CC code of 6 in the merged_screenImage overwrite section, this refers to the gl entry in the table, currently stored at CC_id_table[6]. We delete it from the table with
 Then, after lcdString is overwritten at its startPos in the merged_screenImage, any new CCs in lcdString are saved into free locations in CC_id_table. CGRAM overflow can occur if there are more than eight unique custom characters (CCs). This condition is signalled with one or more "#" flags on the LCD.
-Continuing, we now parse the to-be-overwritten section of merged_screenImage and delete any prior CCs found with a fontChar between 0x08 and 0x0f, with fontFlag = " ".
+Continuing, we parse the to-be-overwritten section of merged_screenImage and delete any prior CCs found with a fontChar between 0x08 and 0x0f, with fontFlag = " ".
 
 (Now parse screenImage for CC flags, load the CC bitmaps to the LCD chip, and place CGRAM_ptrs in screenImage overwriting the fontChars. Use CC_id_table to keep track of the limit of only 8 CCs! Font-Pal then processes the merged lcdString into screenImage at startPos, inserting CCs and error flags as needed.
 Finally, Font-Pal prints all EVEN characters, 0,2,4,6,..., in screen_image to the LCD.
