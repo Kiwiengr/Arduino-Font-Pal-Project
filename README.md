@@ -7,7 +7,7 @@ Copyright (c) 2024 Alastair Roxburgh
 based on the Hitachi HD44780 chip.)
 
 Note:
-While Font-Pal, developed expressly for the Arduino Mega platform, reproduces most of the functionality of its 1977 68HC11 predecessor, the internal algorithms are only remotely similar.
+Developed expressly for the Arduino Mega platform, Font-Pal reproduces most of the functionality of its 1977 68HC11 predecessor. However, the algorithms are only remotely similar.
 
 Font-Pal is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation version 3 of the License.
 
