@@ -1,0 +1,55 @@
+Learn_mode: This is at address E182
+We need to place a jump to Invader somewhere near the start of this:
+86 00          ldaa    #00    <---Old value = 10 (dim); use 00 for bight)
+B7 02AB        staa    bright_level 
+
+New code replacing CE1000:
+7E 0400  <---Where 0400 is the address of the Invader code.
+;CE 1000        ldx     #regbase
+86 80          ldaa    #$80                   ;Enable TOI, disable RTI
+A7 24          staa    tmsk2,x
+6F 22          clr     tmsk1,x                ;Disable IC, OC
+6F 2D          clr     sccr2,x                ;Disable SCI interrupts
+BD DEE2        jsr     LCD_init
+18CE 870C      ldy     #ir_learn_screen  =[..IR.Program.Mode...]   
+BD E162        jsr     screen_out         
+
+
+
+
+IR Learning Mode will instead be the Invaders Credits
+To get into the Invaders Credits, press the front panel button within 2 seconds of power up.
+
+
+
+
+This is at address 0400
+Invader code:
+BD DEE2   Invade: jsr     LCD_init
+30                tsx
+8F                xgdx
+83 0007           subd    #7          ;Allocate local variables on stack
+8F                xgdx
+35                txs
+    splash_screen:
+BD xxxx           jsr     splash
+         inv_init:
+BD DEE2           jsr     LCD_init
+18CE 08B4         ldy     #Inv_screen
+BD E162           jsr     screen_out
+        delay   1500*10
+============================================
+
+
+
+
+
+
+Invade: jsr     LCD_init
+        tsx
+        xgdx
+        subd    #7          ;Allocate local variables on stack
+        xgdx
+        txs
+splash_screen:
+        jsr     splash
